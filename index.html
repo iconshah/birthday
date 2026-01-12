@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 Happy Birthday, My Love | A Digital Celebration</title>
+
+    <!-- Meta Tags for Professional Sharing -->
+    <meta property="og:title" content="Happy Birthday, My Love! 💝">
+    <meta property="og:description" content="A special digital celebration made with love">
+    <meta property="og:image" content="assets/photos/1.jpeg">
+    <meta name="theme-color" content="#ff4d8d">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💝</text></svg>">
+
+    <!-- Preload important images -->
+    <link rel="preload" href="assets/photos/1.jpeg" as="image">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-hearts">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-heart"></i>
+            </div>
+            <p class="loading-text">Preparing something special...</p>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particle Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Snow/Confetti Container -->
+    <div class="snow-container"></div>
+
+    <!-- Music Notification -->
+    <div class="music-notification" id="musicNotification">
+        <p>🎵 Click anywhere, then click music button to play!</p>
+    </div>
+
+    <!-- Navigation (Hidden until scroll) -->
+    <nav class="main-nav" id="mainNav">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">💝 <span>Her Birthday</span></a>
+            <div class="nav-links">
+                <a href="#home"><i class="fas fa-home"></i> Home</a>
+                <a href="#story"><i class="fas fa-book-heart"></i> Our Story</a>
+                <a href="#memories"><i class="fas fa-images"></i> Memories</a>
+                <a href="#gift"><i class="fas fa-gift"></i> Surprise</a>
+                <a href="#wish"><i class="fas fa-star"></i> Wish</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="hero-background">
+                <div class="floating-hero">
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title animate__animated animate__fadeInDown">
+                        <span class="greeting">Happy Birthday</span>
+                        <span class="her-name-glitch" data-text="MY LOVE">MY LOVE</span>
+                    </h1>
+                    <p class="hero-subtitle animate__animated animate__fadeInUp">
+                        Today, the world celebrates <span class="highlight">the most incredible person</span> I know
+                    </p>
+                    <div class="hero-stats animate__animated animate__fadeInUp">
+                        <div class="stat">
+                            <div class="stat-number" id="daysTogether">0</div>
+                            <div class="stat-label">Days Together</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number" id="smilesShared">∞</div>
+                            <div class="stat-label">Smiles Shared</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Of My Heart</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="image-frame">
+                        <img src="assets/photos/1.jpeg" alt="Our Love" class="main-image" id="heroImage" loading="eager"
+                            onerror="handleHeroImageError(this)">
+                        <div class="image-overlay">
+                            <div class="polaroid-effect">
+                                <div class="polaroid-text" id="heroCaption">My Favorite Person</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <p>Scroll for magic</p>
+            </div>
+        </section>
+
+        <!-- Love Story Timeline -->
+        <section id="story" class="timeline-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-heartbeat"></i>
+                    Our Beautiful Journey
+                    <i class="fas fa-heartbeat"></i>
+                </h2>
+                <p class="section-subtitle">Every moment with you is a chapter in my favorite story</p>
+            </div>
+
+            <div class="timeline">
+                <!-- Timeline Item 1 -->
+                <div class="timeline-item visible">
+                    <div class="timeline-date">The Beginning</div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="card-header">
+                                <i class="fas fa-star"></i>
+                                <h3>When We First Met</h3>
+                            </div>
+                            <p>The day my world gained colors I never knew existed. Your smile was the sunrise of my new
+                                life. Haha, it was so uncertain and unbelievable that we met on Berry picking, on our worst and most challenging days. Haha but still 
+                            we both got through it together and made it stronger every day.</p>
+                            <div class="card-footer">
+                                <span class="memory-tag">💖 First Look</span>
+                                <span class="memory-tag">✨ Worst days and Our worst appearance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="timeline-item visible">
+                    <div class="timeline-date">Growing Together</div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="card-header">
+                                <i class="fas fa-heart"></i>
+                                <h3>The Little Moments</h3>
+                            </div>
+                            <p>Morning chya-coffee and sutta, late-night talks, inside jokes – these became the rhythm of my
+                                happiness. </p>
+                            <div class="card-footer">
+                                <span class="memory-tag">☕ Burger ani extra coke Dates</span>
+                                <span class="memory-tag">😂 Laughter</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="timeline-item visible">
+                    <div class="timeline-date">Today & Forever</div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="card-header">
+                                <i class="fas fa-infinity"></i>
+                                <h3>My Always</h3>
+                            </div>
+                            <p>You are my today and all of my tomorrows. Every day with you feels like a beautiful
+                                dream.</p>
+                            <div class="card-footer">
+                                <span class="memory-tag">✨ Forever</span>
+                                <span class="memory-tag">💝 Always</span>
+                                <span class="memory-tag">❤️ Eternal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add more timeline items if you want -->
+                <div class="timeline-item visible">
+                    <div class="timeline-date">Future Dreams</div>
+                    <div class="timeline-content">
+                        <div class="timeline-card">
+                            <div class="card-header">
+                                <i class="fas fa-rainbow"></i>
+                                <h3>Our Future</h3>
+                            </div>
+                            <p>I know sometimes i bother you, but still i love you. I love to irritate you meri mayalu. 
+                                euta timi ta hau ni jaslai i can irritate. I can't wait for all the irritations, dreams, and beautiful moments we'll share together.
+                            </p>
+                            <div class="card-footer">
+                                <span class="memory-tag">🌈 Adventures</span>
+                                <span class="memory-tag">🌟 Dreams</span>
+                                <span class="memory-tag">🎯 Goals</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Photo Gallery -->
+        <section id="memories" class="gallery-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-camera-retro"></i>
+                    Memory Lane
+                    <i class="fas fa-images"></i>
+                </h2>
+                <p class="section-subtitle">Hover over memories and click to relive them</p>
+            </div>
+
+            <div class="gallery-controls">
+                <button class="gallery-filter active" data-filter="all">All Memories</button>
+                <button class="gallery-filter" data-filter="special">Special Moments</button>
+                <button class="gallery-filter" data-filter="fun">Fun Times</button>
+                <button class="gallery-filter" data-filter="love">Love</button>
+            </div>
+
+            <div class="masonry-gallery">
+                <!-- Gallery Items will be populated by JavaScript -->
+                <div class="gallery-loading">
+                    <div class="spinner"></div>
+                    <p>Loading beautiful memories...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Love Letter -->
+        <section class="letter-section">
+            <div class="letter-container">
+                <div class="letter-envelope" id="envelope">
+                    <div class="envelope-front">
+                        <div class="envelope-seal">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="envelope-text">
+                            <p>To My Love</p>
+                            <p>Open with care</p>
+                        </div>
+                    </div>
+                    <div class="envelope-back"></div>
+                </div>
+
+                <div class="letter-content hidden" id="letterContent">
+                    <div class="letter-paper">
+                        <div class="letter-header">
+                            <h3>My Dearest Love,</h3>
+                            <div class="letter-date">Today & Always</div>
+                        </div>
+                        <div class="letter-body">
+                            <p>On this special day, I want you to know...</p>
+                            <p class="love-line">You are the melody in my silence, the color in my world, the warmth in
+                                my soul.</p>
+                            <p>Every moment with you is a treasure, every smile a gift, every memory a precious jewel.
+                            </p>
+                            <p class="signature">Forever Yours,<br>Your Love</p>
+                        </div>
+                        <div class="letter-wax-seal">
+                            <div class="wax-seal">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Birthday Cake -->
+        <section class="cake-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-birthday-cake"></i>
+                    Make a Wish!
+                    <i class="fas fa-star"></i>
+                </h2>
+                <p class="section-subtitle">Blow out the candles and make your birthday wish</p>
+            </div>
+
+            <div class="cake-container">
+                <div class="cake-3d">
+                    <div class="cake-layer layer-1"></div>
+                    <div class="cake-layer layer-2"></div>
+                    <div class="cake-layer layer-3"></div>
+
+                    <div class="candles">
+                        <div class="candle" data-number="1">
+                            <div class="candle-body"></div>
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle" data-number="2">
+                            <div class="candle-body"></div>
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle" data-number="3">
+                            <div class="candle-body"></div>
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle" data-number="4">
+                            <div class="candle-body"></div>
+                            <div class="flame"></div>
+                        </div>
+                        <div class="candle" data-number="5">
+                            <div class="candle-body"></div>
+                            <div class="flame"></div>
+                        </div>
+                    </div>
+
+                    <div class="cake-decoration"></div>
+                </div>
+
+                <div class="cake-controls">
+                    <button class="btn-primary" id="lightCandles">
+                        <i class="fas fa-fire"></i> Light Candles
+                    </button>
+                    <button class="btn-secondary" id="blowCandles">
+                        <i class="fas fa-wind"></i> Blow Candles
+                    </button>
+                    <button class="btn-ghost" id="resetCake">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+
+                <div class="wish-message hidden" id="wishMessage">
+                    <div class="confetti-burst"></div>
+                    <h3>🎉 Your wish will come true! 🎉</h3>
+                    <p>The universe is listening to your beautiful heart</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Surprise Section -->
+        <section id="gift" class="surprise-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-gift"></i>
+                    Your Special Surprise
+                    <i class="fas fa-surprise"></i>
+                </h2>
+                <p class="section-subtitle">A little something from my heart to yours</p>
+            </div>
+
+            <div class="surprise-container">
+                <div class="gift-box" id="giftBox">
+                    <div class="box-lid"></div>
+                    <div class="box-body">
+                        <div class="ribbon-horizontal"></div>
+                        <div class="ribbon-vertical"></div>
+                        <div class="bow">
+                            <div class="bow-center"></div>
+                            <div class="bow-loop left"></div>
+                            <div class="bow-loop right"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="open-gift-btn" id="openGift">
+                    <i class="fas fa-box-open"></i> Open Your Gift
+                </button>
+
+                <div class="surprise-content hidden" id="surpriseContent">
+                    <div class="surprise-card">
+                        <div class="card-sparkle"></div>
+                        <h3>The Greatest Gift</h3>
+                        <p class="surprise-text">
+                            My love for you is the one gift that grows stronger every day.
+                            But there's a real surprise waiting for you when we meet!
+                            For now, know that you are cherished more than words can express.
+                        </p>
+                        <div class="love-promise">
+                            <i class="fas fa-heart"></i>
+                            <span>Always & Forever</span>
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Wish -->
+        <section id="wish" class="wish-section">
+            <div class="wish-container">
+                <div class="wish-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <h2 class="wish-title">My Birthday Wish For You</h2>
+                <div class="wish-text">
+                    <p>May your day be filled with joy, laughter, and all the happiness you bring to others.</p>
+                    <p>May this year bring you everything you dream of and more.</p>
+                    <p>May you always know how deeply you are loved.</p>
+                </div>
+                <div class="final-message">
+                    <h3>Happy Birthday, My Love!</h3>
+                    <p class="forever">Forever Yours</p>
+                </div>
+
+                <!-- Love Calculator (Fun Element) -->
+                <div class="love-calculator">
+                    <div class="calculator-card">
+                        <h4><i class="fas fa-heart"></i> Our Love Meter</h4>
+                        <div class="meter">
+                            <div class="meter-fill" id="loveMeter"></div>
+                        </div>
+                        <div class="percentage">100%</div>
+                        <p class="meter-text">Perfect Match</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-heart">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="footer-text">
+                <p>Made with infinite love for the most amazing person</p>
+                <p class="footer-date">© <span id="currentYear"></span> • Your Forever Love</p>
+            </div>
+            <div class="footer-social">
+                <button class="music-toggle" id="musicToggle">
+                    <i class="fas fa-music"></i>
+                    <span>Play Music</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Theme</span>
+                </button>
+                <button class="share-btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Share</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Hidden Audio Player with Multiple Sources -->
+        <audio id="backgroundMusic" loop preload="auto" volume="0.3">
+            <source src="https://assets.mixkit.co/music/preview/mixkit-happy-birthday-to-you-443.mp3" type="audio/mpeg">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-738.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <!-- YouTube Backup Player (hidden) -->
+        <div id="youtubeBackup" style="display: none;">
+            <iframe width="0" height="0"
+                src="https://www.youtube.com/embed/5J5bexJxQo4?enablejsapi=1&rel=0&modestbranding=1" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <img class="modal-image" id="modalImage">
+            <div class="modal-info">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDate"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
