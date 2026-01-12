@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initGift();
     initMusic();
     initTheme();
-    initShare();
+    // initShare();
     initToast();
     initCounters();
     
@@ -421,18 +421,11 @@ function initGallery() {
         // Special Moments (Photos 2-5)
         {
             src: 'assets/photos/2.jpeg',
-            title: 'Our First Date',
+            title: 'Our First fishing Date',
             date: 'The Beginning',
             category: 'special',
-            description: 'The day my heart found its home'
-        },
-        {
-            src: 'assets/photos/3.jpeg',
-            title: 'Anniversary Celebration',
-            date: 'One Year Together',
-            category: 'special',
-            description: 'Celebrating our beautiful journey'
-        },
+            description: 'The day i caught my first fish with you'},
+       
         {
             src: 'assets/photos/4.jpeg',
             title: 'Trip Together',
@@ -481,10 +474,10 @@ function initGallery() {
         // Romantic Moments (Photos 10-13)
         {
             src: 'assets/photos/10.jpeg',
-            title: 'Sunset Moments',
+            title: 'Random Moment',
             date: 'Golden Hour',
             category: 'love',
-            description: 'Watching sunsets with my favorite person'
+            description: 'Clicking picture with my sunrise and sunset'
         },
         {
             src: 'assets/photos/11.jpeg',
@@ -787,22 +780,121 @@ function initGift() {
     }
     openGiftBtn.addEventListener('click', openGift);
 }
-
 // ===========================================================================
-// MUSIC PLAYER - GUARANTEED TO WORK
+// MUSIC PLAYER - DIRECT YOUTUBE BACKGROUND PLAY
 // ===========================================================================
 function initMusic() {
-    const music = document.getElementById('backgroundMusic');
     const musicToggle = document.getElementById('musicToggle');
     const musicNotification = document.getElementById('musicNotification');
     
-    if (!music || !musicToggle) return;
+    if (!musicToggle) return;
     
     let isPlaying = false;
-    let audioContextUnlocked = false;
+    let youtubePlayer = null;
+    let youtubeAPILoaded = false;
     
-    // Set initial volume
-    music.volume = 0.3;
+    // Load YouTube API
+    function loadYouTubeAPI() {
+        return new Promise((resolve) => {
+            if (typeof YT !== 'undefined' && YT.loaded) {
+                youtubeAPILoaded = true;
+                resolve(true);
+                return;
+            }
+            
+            // Create container for YouTube player
+            const youtubeContainer = document.getElementById('youtubeMusic');
+            if (!youtubeContainer) {
+                console.error('YouTube container not found');
+                resolve(false);
+                return;
+            }
+            
+            // Load YouTube iframe API
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            
+            // Create YouTube player
+            window.onYouTubeIframeAPIReady = function() {
+                youtubeAPILoaded = true;
+                youtubePlayer = new YT.Player('youtubeMusic', {
+                    height: '0',
+                    width: '0',
+                    videoId: '5kHcDEgYO9k',
+                    playerVars: {
+                        'autoplay': 0,
+                        'controls': 0,
+                        'disablekb': 1,
+                        'fs': 0,
+                        'loop': 1,
+                        'playlist': '5kHcDEgYO9k',
+                        'rel': 0,
+                        'showinfo': 0,
+                        'modestbranding': 1,
+                        'iv_load_policy': 3
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': onPlayerError
+                    }
+                });
+                resolve(true);
+            };
+            
+            // Timeout if YouTube API doesn't load
+            setTimeout(() => {
+                if (!youtubeAPILoaded) {
+                    console.error('YouTube API load timeout');
+                    resolve(false);
+                }
+            }, 10000);
+        });
+    }
+    
+    // YouTube player ready
+    function onPlayerReady(event) {
+        console.log('🎵 YouTube player ready');
+        event.target.setVolume(50); // Set volume to 50%
+        
+        // Show notification that music is ready
+        showToast('🎵 "Birthday Song" is ready to play!', 'info');
+        
+        // Update button text
+        updateMusicButton();
+    }
+    
+    // YouTube player state change
+    function onPlayerStateChange(event) {
+        console.log('Player state changed:', event.data);
+        
+        // YT.PlayerState.PLAYING = 1
+        // YT.PlayerState.PAUSED = 2
+        // YT.PlayerState.ENDED = 0
+        
+        if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+            updateMusicButton();
+            console.log('Music started playing');
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            isPlaying = false;
+            updateMusicButton();
+            console.log('Music paused');
+        } else if (event.data === YT.PlayerState.ENDED) {
+            // Video ended - will loop automatically due to playlist parameter
+            console.log('Music ended, looping...');
+        }
+    }
+    
+    // YouTube player error
+    function onPlayerError(event) {
+        console.error('YouTube player error:', event.data);
+        showToast('⚠️ Could not play music. Please click the button again.', 'error');
+        isPlaying = false;
+        updateMusicButton();
+    }
     
     // Update button appearance
     function updateMusicButton() {
@@ -815,138 +907,103 @@ function initMusic() {
             icon.className = 'fas fa-volume-up';
             text.textContent = 'Music On';
             musicToggle.classList.add('playing');
-            musicToggle.title = 'Click to pause music';
+            musicToggle.title = 'Click to pause "Birthday Song "';
         } else {
             icon.className = 'fas fa-volume-mute';
             text.textContent = 'Play Music';
             musicToggle.classList.remove('playing');
-            musicToggle.title = 'Click to play birthday music';
+            musicToggle.title = 'Click to play "Birthday Song "';
         }
     }
     
-    // Try to play music with fallback
-    function playMusicWithFallback() {
-        if (isPlaying) return;
-        
-        // First try HTML5 audio
-        music.play().then(() => {
-            isPlaying = true;
-            updateMusicButton();
-            showToast('🎵 Birthday music playing!', 'success');
-            console.log('Music started via HTML5 Audio');
+    // Play YouTube music
+    function playYouTubeMusic() {
+        if (!youtubePlayer || typeof youtubePlayer.playVideo !== 'function') {
+            showToast('🎵 Loading "Birthday Song "...', 'info');
             
-            // Hide notification
-            if (musicNotification) {
-                musicNotification.style.animation = 'slideOutRight 0.5s ease forwards';
-                setTimeout(() => {
-                    musicNotification.style.display = 'none';
-                }, 500);
-            }
-        }).catch(error => {
-            console.log('HTML5 Audio failed:', error.message);
-            
-            // Try YouTube fallback
-            showToast('🎵 Starting birthday music...', 'info');
-            setTimeout(() => {
-                playYouTubeMusic();
-            }, 1000);
-        });
+            // Load YouTube API and create player
+            loadYouTubeAPI().then(success => {
+                if (success && youtubePlayer) {
+                    setTimeout(() => {
+                        youtubePlayer.playVideo();
+                        showToast('🎵 Playing "Birthday Song "!', 'success');
+                    }, 500);
+                } else {
+                    showToast('⚠️ Could not load music player. Please refresh and try again.', 'error');
+                }
+            });
+        } else {
+            youtubePlayer.playVideo();
+            showToast('🎵 Playing "Birthday Song "!', 'success');
+        }
     }
     
-    // YouTube fallback player
-    function playYouTubeMusic() {
-        const youtubeBackup = document.getElementById('youtubeBackup');
-        if (youtubeBackup) {
-            const iframe = youtubeBackup.querySelector('iframe');
-            if (iframe && typeof iframe.contentWindow !== 'undefined') {
-                // This would require YouTube API, but we'll just show a message
-                showToast('🎵 Music ready! Click music button again.', 'success');
-                musicToggle.onclick = function() {
-                    showToast('🎵 For best experience, play some music in the background!', 'info');
-                    this.disabled = true;
-                    this.innerHTML = '<i class="fas fa-volume-up"></i> Enjoy the Music!';
-                };
-            }
+    // Pause YouTube music
+    function pauseYouTubeMusic() {
+        if (youtubePlayer && typeof youtubePlayer.pauseVideo === 'function') {
+            youtubePlayer.pauseVideo();
+            showToast('⏸️ Music paused', 'info');
+        } else {
+            isPlaying = false;
+            updateMusicButton();
         }
     }
     
     // Music toggle click handler
-    musicToggle.addEventListener('click', function(e) {
+    musicToggle.addEventListener('click', async function(e) {
         e.preventDefault();
         e.stopPropagation();
         
+        // Ensure YouTube API is loaded
+        if (!youtubeAPILoaded) {
+            await loadYouTubeAPI();
+        }
+        
         if (isPlaying) {
             // Pause music
-            music.pause();
-            isPlaying = false;
-            showToast('⏸️ Music paused', 'info');
+            pauseYouTubeMusic();
         } else {
             // Play music
-            playMusicWithFallback();
+            playYouTubeMusic();
         }
-        updateMusicButton();
     });
     
-    // User interaction handler - unlock audio on any click
+    // User interaction handler - required for autoplay
     function handleUserInteraction() {
-        if (!audioContextUnlocked) {
-            unlockAudio();
-            audioContextUnlocked = true;
-            
-            // Try to auto-play after user interaction
-            setTimeout(() => {
-                if (!isPlaying) {
-                    playMusicWithFallback();
-                }
-            }, 500);
-            
-            // Remove event listeners after first interaction
-            document.removeEventListener('click', handleUserInteraction);
-            document.removeEventListener('touchstart', handleUserInteraction);
-            document.removeEventListener('keydown', handleUserInteraction);
-        }
+        // Remove this listener after first interaction
+        document.removeEventListener('click', handleUserInteraction);
+        document.removeEventListener('touchstart', handleUserInteraction);
+        
+        // Pre-load YouTube player
+        setTimeout(() => {
+            loadYouTubeAPI();
+        }, 1000);
     }
     
-    // Listen for user interaction
+    // Listen for user interaction (required for autoplay on mobile)
     document.addEventListener('click', handleUserInteraction);
     document.addEventListener('touchstart', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-    
-    // Music ended handler
-    music.addEventListener('ended', () => {
-        console.log('Music ended, restarting...');
-        music.currentTime = 0;
-        music.play().catch(() => {
-            isPlaying = false;
-            updateMusicButton();
-        });
-    });
-    
-    // Music error handler
-    music.addEventListener('error', (e) => {
-        console.error('Music error:', e);
-        isPlaying = false;
-        updateMusicButton();
-        
-        // Try alternative source
-        setTimeout(() => {
-            if (music.src.includes('mixkit')) {
-                music.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-                music.load();
-                showToast('🎵 Switching to alternative music source...', 'info');
-            }
-        }, 2000);
-    });
     
     // Initialize button
     updateMusicButton();
     
-    // Auto-try to play after 5 seconds if user interacted
+    // Show music notification
     setTimeout(() => {
-        if (audioContextUnlocked && !isPlaying) {
-            playMusicWithFallback();
+        if (musicNotification) {
+            musicNotification.style.display = 'block';
+            setTimeout(() => {
+                musicNotification.style.animation = 'slideOutRight 0.5s ease forwards';
+                setTimeout(() => {
+                    musicNotification.style.display = 'none';
+                }, 500);
+            }, 8000);
         }
-    }, 5000);
+    }, 3000);
+    
+    // Pre-load YouTube API on page load
+    setTimeout(() => {
+        loadYouTubeAPI();
+    }, 2000);
 }
 
 // ===========================================================================
@@ -989,32 +1046,32 @@ function initTheme() {
 // ===========================================================================
 // SHARE FUNCTIONALITY
 // ===========================================================================
-function initShare() {
-    const shareBtn = document.getElementById('shareBtn');
-    if (!shareBtn) return;
+// function initShare() {
+//     const shareBtn = document.getElementById('shareBtn');
+//     if (!shareBtn) return;
     
-    shareBtn.addEventListener('click', async () => {
-        const shareData = {
-            title: 'Happy Birthday! 🎉',
-            text: 'Check out this beautiful birthday website made with love!',
-            url: window.location.href
-        };
+//     shareBtn.addEventListener('click', async () => {
+//         const shareData = {
+//             title: 'Happy Birthday! 🎉',
+//             text: 'Check out this beautiful birthday website made with love!',
+//             url: window.location.href
+//         };
         
-        try {
-            if (navigator.share) {
-                await navigator.share(shareData);
-                showToast('Shared successfully!', 'success');
-            } else {
-                // Fallback: Copy to clipboard
-                await navigator.clipboard.writeText(window.location.href);
-                showToast('Link copied to clipboard!', 'success');
-            }
-        } catch (err) {
-            console.log('Error sharing:', err);
-            showToast('Could not share', 'error');
-        }
-    });
-}
+//         try {
+//             if (navigator.share) {
+//                 await navigator.share(shareData);
+//                 showToast('Shared successfully!', 'success');
+//             } else {
+//                 // Fallback: Copy to clipboard
+//                 await navigator.clipboard.writeText(window.location.href);
+//                 showToast('Link copied to clipboard!', 'success');
+//             }
+//         } catch (err) {
+//             console.log('Error sharing:', err);
+//             showToast('Could not share', 'error');
+//         }
+//     });
+// }
 
 // ===========================================================================
 // TOAST NOTIFICATIONS
